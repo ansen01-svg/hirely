@@ -8,12 +8,23 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundColor: {
+        primary: "#fff",
+        secondary: "#10a37f",
+        gray: "#f4f4f4",
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#000",
+        primaryLight: "#2d333a",
+        secondary: "#10a37f",
+        secondaryLight: "#f7724e",
+        gray500: "#647380",
+        gray400: "#b2bbc2",
+        white: "#fff",
       },
     },
   },
   plugins: [],
 };
+
 export default config;
