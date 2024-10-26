@@ -33,11 +33,16 @@ export const authConfig: NextAuthConfig = {
 
           if (!passwordMatch) throw new Error("Incorrect Password");
 
-          return user;
+          return {
+            email: user.email,
+            name: user.username,
+          };
         } catch (error) {
           if (error instanceof ZodError) {
             return null;
           }
+
+          return null;
         }
       },
     }),

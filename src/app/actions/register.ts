@@ -31,5 +31,8 @@ export const register = async (values: UserType) => {
     console.log(savedUser);
   } catch (error) {
     console.error(error);
+    return {
+      error: "Network error",
+    };
   }
 };

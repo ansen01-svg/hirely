@@ -17,7 +17,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       await connectDB();
 
       if (user) {
-        // Check if user already exists in the database
         let existingUser = await User.findOne({ email: user.email });
 
         if (!existingUser) {
@@ -33,9 +32,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         // Set the user data to token
-        token.id = existingUser._id;
-        token.email = existingUser.email;
-        token.name = existingUser.name;
+        token.user = {
+          email: existingUser.email,
+          name: existingUser.username,
+        };
       }
 
       return token;
@@ -43,10 +43,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.name = token.name;
       }
+
       return session;
     },
   },
