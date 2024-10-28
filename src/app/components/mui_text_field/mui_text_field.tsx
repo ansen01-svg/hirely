@@ -13,7 +13,7 @@ export default function MuiTextField(props: MuiTextFieldPropType) {
   const { label, type, name, icon, handleClick } = props;
 
   return (
-    <div className="w-full h-[52px] px-4 flex items-center justify-items-center border-[1px] border-slate-200 rounded">
+    <div className="w-full h-[52px] px-4 flex items-center justify-items-center border-[1px] border-slate-400 rounded">
       <TextField
         id={name}
         variant="standard"
