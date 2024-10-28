@@ -34,6 +34,7 @@ export const authConfig: NextAuthConfig = {
           if (!passwordMatch) throw new Error("Incorrect Password");
 
           return {
+            id: user.id,
             email: user.email,
             name: user.username,
           };

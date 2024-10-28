@@ -94,7 +94,7 @@ export default function Main() {
         <div className="w-full flex items-center justify-center">
           <div className="flex-grow border-none h-[1px] bg-slate-300 mr-2"></div>
           <div>
-            <p className="text-[13px]">or</p>
+            <p className="text-[13px]">OR</p>
           </div>
           <div className="flex-grow border-none h-[1px] bg-slate-300 ml-2"></div>
         </div>
