@@ -10,7 +10,10 @@ export default async function Header() {
 
   return (
     <div className="w-full border-b-[1px] border-slate-300">
-      <Conent user={getFirstLetter() as string} />
+      <Conent
+        image={session?.user?.image || ""}
+        user={getFirstLetter() as string}
+      />
     </div>
   );
 }
