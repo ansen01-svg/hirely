@@ -1,19 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
+import { JobData } from "@/app/types";
 
 type JobsHolderSectionPropType = {
-  jobs: Record<string, unknown>[];
+  jobs: JobData[];
 };
 
 export default function JobsHolderSection({ jobs }: JobsHolderSectionPropType) {
   return (
     <div className="w-full px-8 md:px-24 lg:px-44">
-      <div className="w-full py-8 border-solid">
-        <p className="text-[15px] text-primaryLight font-bold">
-          {jobs.length} jobs
-        </p>
-      </div>
+      {jobs.length > 0 && (
+        <div className="w-full py-8">
+          <p className="text-[15px] text-primaryLight font-bold">
+            {jobs.length} jobs
+          </p>
+        </div>
+      )}
       <div className="w-full flex flex-col items-center justify-center gap-5 border-solid">
         {jobs &&
           jobs.map((job) => {
@@ -25,11 +28,11 @@ export default function JobsHolderSection({ jobs }: JobsHolderSectionPropType) {
 }
 
 type JobCardPropType = {
-  job: Record<string, unknown>;
+  job: JobData;
 };
 
 // calculate when job was posted
-function getTimeDifference(dateString: string): string {
+export function getTimeDifference(dateString: string): string {
   const targetDate = new Date(dateString);
   const currentDate = new Date();
 
@@ -77,14 +80,10 @@ function JobCard({ job }: JobCardPropType) {
       <div className="w-full md:w-[10%] flex items-center justify-center">
         {employer_logo ? (
           <div className="w-12 h-12 rounded-full relative border-[1px] border-slate-300">
-            <Image
+            <CustomImage
               src={employer_logo as string}
-              alt={"company_logo"}
-              fill
-              priority
-              sizes="48px"
-              style={{ objectFit: "contain" }}
-              className="rounded-full"
+              alt="compony_logo"
+              sizes={48}
             />
           </div>
         ) : (
@@ -94,10 +93,8 @@ function JobCard({ job }: JobCardPropType) {
         )}
       </div>
       <div className="w-full md:w-[90%] flex flex-col items-center justify-start gap-3 md:items-start">
-        <div className="text-[15px] flex items-center justify-center">
-          <span className="font-medium text-center">
-            {employer_name as string}
-          </span>
+        <div className="text-[15px] flex items-center justify-center text-center">
+          <span className="font-medium">{employer_name as string}</span>
           &nbsp;
           {(job_posted_at_datetime_utc as string) && (
             <span className="text-gray-500 text-center">
@@ -106,8 +103,8 @@ function JobCard({ job }: JobCardPropType) {
           )}
         </div>
 
-        <div className=" text-[15px]">
-          <span className="font-medium text-secondary text-center">
+        <div className=" text-[15px] text-center">
+          <span className="font-medium text-secondary">
             {job_title as string}
           </span>
         </div>
@@ -133,5 +130,40 @@ function JobCard({ job }: JobCardPropType) {
         </div>
       </div>
     </Link>
+  );
+}
+
+interface CustomImageProps {
+  src: string;
+  alt: string;
+  sizes: number;
+}
+
+export function CustomImage({ src, alt, sizes }: CustomImageProps) {
+  const allowedDomains = [
+    "upload.wikimedia.org",
+    "encrypted-tbn0.gstatic.com",
+    "www.soft-inc.com",
+  ];
+  const hostname = new URL(src).hostname;
+
+  return allowedDomains.includes(hostname) ? (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      priority
+      sizes={`${sizes}px`}
+      style={{ objectFit: "contain" }}
+      className="rounded-full"
+    />
+  ) : (
+    <img
+      src={src}
+      alt={alt}
+      width={"100%"}
+      height={"100%"}
+      style={{ borderRadius: "50px" }}
+    />
   );
 }

@@ -5,6 +5,7 @@ export interface UserDocument {
   email: string;
   password: string;
   username: string;
+  image: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,6 +30,9 @@ const UserSchema = new Schema<UserDocument>(
     username: {
       type: String,
       required: [true, "Name is required"],
+    },
+    image: {
+      type: String,
     },
   },
   {
