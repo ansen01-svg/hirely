@@ -6,6 +6,7 @@ export interface UserDocument {
   password: string;
   username: string;
   image: string;
+  expertise: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,6 +33,9 @@ const UserSchema = new Schema<UserDocument>(
       required: [true, "Name is required"],
     },
     image: {
+      type: String,
+    },
+    expertise: {
       type: String,
     },
   },

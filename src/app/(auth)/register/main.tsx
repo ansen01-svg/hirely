@@ -11,10 +11,10 @@ import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
 
 export default function Main() {
   const [error, setError] = useState<string>();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);

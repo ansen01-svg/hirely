@@ -1,15 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
-import User from "@/app/models/user.model";
 import { connectDB } from "@/app/lib/db";
-import { verifyToken } from "@/app/lib/verifyToken";
-import { JwtPayload } from "jsonwebtoken";
+import User from "@/app/models/user.model";
 
 connectDB();
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
+
+    const requestBody = await request.json();
+    const { expertise } = requestBody;
 
     if (!token) {
       return NextResponse.json(
@@ -18,16 +19,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let userId;
-
-    if (token.includes("userId")) {
-      userId = token.split("=")[1];
-    } else {
-      const userData = verifyToken(token) as JwtPayload;
-      userId = userData?.id;
-    }
-
-    const user = await User.findOne({ _id: userId }).select("-password");
+    const userId = token.split("=")[1];
+    const user = await User.findOne({ _id: userId });
 
     if (!user) {
       return NextResponse.json(
@@ -36,9 +29,16 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    user.expertise = expertise;
+    await user.save();
+
     return NextResponse.json(
-      { message: "Current user", success: true, data: user },
-      { status: 200 }
+      {
+        message: `User with id ${userId} has been successfully updated.`,
+        data: user,
+        success: true,
+      },
+      { status: 201 }
     );
   } catch (error) {
     console.error("Error fetching user:", error);

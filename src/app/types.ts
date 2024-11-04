@@ -82,4 +82,11 @@ export type OptionObjectTypes = {
   value: string;
 };
 
+export type ExpertiseOptionType = {
+  id: number;
+  title: string;
+};
+
 export type OptionArrayTypes = OptionObjectTypes[];
+
+export type ExpertiseOptionArrayTypes = ExpertiseOptionType[];

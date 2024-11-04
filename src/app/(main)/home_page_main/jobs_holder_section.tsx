@@ -79,7 +79,7 @@ function JobCard({ job }: JobCardPropType) {
     >
       <div className="w-full md:w-[10%] flex items-center justify-center">
         {employer_logo ? (
-          <div className="w-12 h-12 rounded-full relative border-[1px] border-slate-300">
+          <div className="w-12 h-12 rounded-full relative flex items-center justify-center border-[1px] border-slate-300">
             <CustomImage
               src={employer_logo as string}
               alt="compony_logo"
@@ -93,7 +93,7 @@ function JobCard({ job }: JobCardPropType) {
         )}
       </div>
       <div className="w-full md:w-[90%] flex flex-col items-center justify-start gap-3 md:items-start">
-        <div className="text-[15px] flex items-center justify-center text-center">
+        <div className="text-[15px] flex items-center justify-center text-center flex-wrap">
           <span className="font-medium">{employer_name as string}</span>
           &nbsp;
           {(job_posted_at_datetime_utc as string) && (
@@ -103,7 +103,7 @@ function JobCard({ job }: JobCardPropType) {
           )}
         </div>
 
-        <div className=" text-[15px] text-center">
+        <div className=" text-[15px] text-center md:text-left">
           <span className="font-medium text-secondary">
             {job_title as string}
           </span>
@@ -163,7 +163,7 @@ export function CustomImage({ src, alt, sizes }: CustomImageProps) {
       alt={alt}
       width={"100%"}
       height={"100%"}
-      style={{ borderRadius: "50px" }}
+      style={{ borderRadius: "50%" }}
     />
   );
 }

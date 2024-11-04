@@ -32,3 +32,23 @@ export const radiusOptions: OptionArrayTypes = [
   { id: 3, title: "Within 100 Kms", value: "100" },
   { id: 4, title: "Within 150 Kms", value: "150" },
 ];
+
+export const expertiseOptions = [
+  { id: 0, title: "Software Engineer" },
+  { id: 1, title: "Software Developer" },
+  { id: 2, title: "Sales Officer" },
+  { id: 3, title: "Software Test Engineer" },
+  { id: 4, title: "Project Management" },
+  { id: 5, title: "Data Analyst" },
+  { id: 6, title: "Data entry Operator" },
+  { id: 7, title: "Database Architect" },
+  { id: 8, title: "Operations" },
+  { id: 9, title: "Sales Manager" },
+  { id: 10, title: "Sales Executive" },
+  { id: 11, title: "Human Resources" },
+  { id: 12, title: "Doctor" },
+  { id: 13, title: "Civil Engineer" },
+  { id: 14, title: "Civil Site Engineer" },
+  { id: 15, title: "Teacher" },
+  { id: 16, title: "Professor" },
+];
