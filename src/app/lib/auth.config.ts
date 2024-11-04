@@ -37,6 +37,7 @@ export const authConfig: NextAuthConfig = {
             id: user.id,
             email: user.email,
             name: user.username,
+            image: user.image || "",
           };
         } catch (error) {
           if (error instanceof ZodError) {

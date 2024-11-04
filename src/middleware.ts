@@ -31,9 +31,15 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
+  // Redirect unauthenticated users trying to access protected routes
   if (!isAuth && isAccessingProtectedRoute) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    // For non-API protected routes only
+    if (!pathname.startsWith("/api")) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
   }
+
+  return NextResponse.next();
 });
 
 export const config = {

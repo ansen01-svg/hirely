@@ -16,8 +16,6 @@ export default async function SingleJob({ params }: SingleJobProps) {
   const job = await getJobDetails(id[0]);
   const jobDetails = job.data[0];
 
-  console.log(jobDetails);
-
   return (
     <div className="w-full">
       <main className="w-full">
@@ -48,8 +46,8 @@ function Header({ companyLogo, companyName, datePosted }: HeaderPropType) {
             <CustomImage src={companyLogo} alt="company_logo" sizes={128} />
           </div>
         </div>
-        <div className="flex-1 h-full px-5 text-[15px] text-primaryLight flex flex-col items-start justify-center gap-1">
-          <h1 className="text-[22px] text-center">{companyName}</h1>
+        <div className="flex-1 h-full px-5 text-[14px] text-primaryLight flex flex-col items-start justify-center gap-1">
+          <h1 className="text-[22px]">{companyName}</h1>
           <h2 className="text-center">
             Posted {getTimeDifference(datePosted)}
           </h2>
@@ -103,7 +101,7 @@ function MainCard({ job }: MainCardPropType) {
               Rs.{job_min_salary} - Rs.{job_max_salary}
             </h2>
           ) : (
-            <h2>Salary undisclosed</h2>
+            <h2 className="text-sm">Salary undisclosed</h2>
           )}
         </div>
 

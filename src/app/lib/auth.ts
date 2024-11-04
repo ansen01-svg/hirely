@@ -4,6 +4,13 @@ import { connectDB } from "./db";
 import User from "@/app/models/user.model";
 import { authConfig } from "./auth.config";
 
+interface UserToken {
+  id: string;
+  email: string;
+  name: string;
+  image?: string;
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   pages: {
@@ -38,7 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: existingUser.email,
           name: existingUser.username,
           image: existingUser.image || user.image,
-        };
+        } as UserToken;
       }
 
       return token;
@@ -46,13 +53,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.name = token.name;
-        // session.user.image = token.picture;
+        const user = token.user as UserToken;
+
+        session.user = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+          emailVerified: null, // Add emailVerified as null
+        };
       }
 
       return session;
     },
   },
+  // cookies: {
+  //   sessionToken: {
+  //     name: `__Secure-next-auth.session-token`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+  //     options: {
+  //       // All of these options must be specified, even if you're not changing them
+  //       httpOnly: true,
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //       domain: `localhost:3000`, // Ideally, you should use an environment variable for this
+  //     },
+  //   },
+  // },
 });

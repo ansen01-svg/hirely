@@ -6,13 +6,21 @@ import DescriptionSection from "./description_section";
 import FormSection from "./form_section";
 import JobsHolderSection from "./jobs_holder_section";
 import { JobData } from "@/app/types";
+import CircularProgress, {
+  circularProgressClasses,
+  CircularProgressProps,
+} from "@mui/material/CircularProgress";
+
+type MainPropType = {
+  role: string;
+};
 
 export type JobSearchType = {
   title: string;
   location: string;
 };
 
-export default function Main() {
+export default function Main({ role }: MainPropType) {
   const [jobs, setJobs] = useState<JobData[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(true);
 
@@ -29,8 +37,6 @@ export default function Main() {
   const [jobRequirements, setJobRequirements] = useState<string>("");
   const [radius, setRadius] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
-
-  console.log(jobs);
 
   const handleJobSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -85,41 +91,44 @@ export default function Main() {
   };
 
   // Fetch jobs based on `page` number and `jobSearch` criteria
-  const fetchJobs = useCallback(async (title: string, location: string) => {
-    setIsFetching(true);
+  const fetchJobs = useCallback(
+    async (title: string, location: string) => {
+      setIsFetching(true);
 
-    // Set default values if title or location is empty
-    const searchTitle = title || "Software developer";
-    const searchLocation = location || "India";
-    const query = `${searchTitle} in ${searchLocation}`.replace(/ /g, "%20");
+      // Set default values if title or location is empty
+      const searchTitle = title || role || "Software developer";
+      const searchLocation = location || "India";
+      const query = `${searchTitle} in ${searchLocation}`.replace(/ /g, "%20");
 
-    const url = `https://jsearch.p.rapidapi.com/search?query=${query}&page=1&num_pages=9&date_posted=all`;
-    const options = {
-      method: "GET",
-      headers: {
-        "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-        "x-rapidapi-host": "jsearch.p.rapidapi.com",
-      },
-    };
+      const url = `https://jsearch.p.rapidapi.com/search?query=${query}&page=1&num_pages=9&date_posted=all`;
+      const options = {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
+          "x-rapidapi-host": "jsearch.p.rapidapi.com",
+        },
+      };
 
-    try {
-      const response = await fetch(url, options);
-      if (response.status === 200) {
-        const data = await response.json();
-        setJobs((prevJobs) => {
-          const newJobs = data.data.filter(
-            (newJob: Record<string, unknown>) =>
-              !prevJobs.some((job) => job.job_id === newJob.job_id)
-          );
-          return [...prevJobs, ...newJobs];
-        });
+      try {
+        const response = await fetch(url, options);
+        if (response.status === 200) {
+          const data = await response.json();
+          setJobs((prevJobs) => {
+            const newJobs = data.data.filter(
+              (newJob: Record<string, unknown>) =>
+                !prevJobs.some((job) => job.job_id === newJob.job_id)
+            );
+            return [...prevJobs, ...newJobs];
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setIsFetching(false);
       }
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
-    } finally {
-      setIsFetching(false);
-    }
-  }, []);
+    },
+    [role]
+  );
 
   // fetch job filters values from local storage and update state
   useEffect(() => {
@@ -188,7 +197,7 @@ export default function Main() {
   // fetch jobs on load
   useEffect(() => {
     fetchJobs(jobSearch.title, jobSearch.location);
-  }, [fetchJobs]);
+  }, [fetchJobs, jobSearch]);
 
   return (
     <main className="w-full mb-8">
@@ -215,13 +224,44 @@ export default function Main() {
   );
 }
 
-function LoadingJobs() {
+function LoadingJobs(props: CircularProgressProps) {
   return (
     <div className="w-full px-8 md:px-24 lg:px-44">
-      <div className="w-full py-8">
-        <p className="text-[14px] font-medium text-primaryLight text-center">
-          loading jobs..
-        </p>
+      <div className="w-full py-8 flex items-center justify-center">
+        <div className="relative">
+          <CircularProgress
+            variant="determinate"
+            sx={(theme) => ({
+              color: theme.palette.grey[200],
+              ...theme.applyStyles("dark", {
+                color: theme.palette.grey[800],
+              }),
+            })}
+            size={32}
+            thickness={5}
+            {...props}
+            value={100}
+          />
+          <CircularProgress
+            variant="indeterminate"
+            disableShrink
+            sx={(theme) => ({
+              color: "#1a90ff",
+              animationDuration: "550ms",
+              position: "absolute",
+              left: 0,
+              [`& .${circularProgressClasses.circle}`]: {
+                strokeLinecap: "round",
+              },
+              ...theme.applyStyles("dark", {
+                color: "#308fe8",
+              }),
+            })}
+            size={32}
+            thickness={5}
+            {...props}
+          />
+        </div>
       </div>
     </div>
   );
