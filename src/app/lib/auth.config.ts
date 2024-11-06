@@ -1,11 +1,8 @@
 import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import bcrypt from "bcryptjs";
 import { ZodError } from "zod";
 import { signInSchema } from "./zod";
-import { connectDB } from "./db";
-import User from "@/app/models/user.model";
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -17,31 +14,38 @@ export const authConfig: NextAuthConfig = {
       },
       authorize: async (credentials) => {
         try {
-          await connectDB();
-
           const { email, password } = await signInSchema.parseAsync(
             credentials
           );
 
-          const user = await User.findOne({
-            email: email,
-          }).select("+password");
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_URL}/api/custom_auth/signin_with_credentials`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            }
+          );
 
-          if (!user) throw new Error("Incorrect Email");
+          if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error);
+          }
 
-          const passwordMatch = await bcrypt.compare(password, user.password);
-
-          if (!passwordMatch) throw new Error("Incorrect Password");
+          const { data } = await response.json();
 
           return {
-            id: user.id,
-            email: user.email,
-            name: user.username,
-            image: user.image || "",
+            id: data.id,
+            email: data.email,
+            name: data.username,
+            image: data.image || "",
+            expertise: data.expertise || "",
           };
         } catch (error) {
           if (error instanceof ZodError) {
-            return null;
+            console.error("Validation error:", error);
+          } else {
+            console.error("Authorization error:", error);
           }
 
           return null;

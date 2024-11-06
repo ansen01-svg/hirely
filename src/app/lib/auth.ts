@@ -1,15 +1,6 @@
 import NextAuth from "next-auth";
-import bcrypt from "bcryptjs";
-import { connectDB } from "./db";
-import User from "@/app/models/user.model";
 import { authConfig } from "./auth.config";
-
-interface UserToken {
-  id: string;
-  email: string;
-  name: string;
-  image?: string;
-}
+import { UserDataType } from "../types";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
@@ -21,31 +12,37 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      await connectDB();
-
       if (user) {
-        let existingUser = await User.findOne({ email: user.email });
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_URL}/api/custom_auth/signin_with_google`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ googleUser: user }),
+            }
+          );
 
-        if (!existingUser) {
-          // If the user doesn't exist, create a new user with a random password
-          const randomPassword = Math.random().toString(36).slice(-8);
-          const hashedPassword = await bcrypt.hash(randomPassword, 10);
+          if (!response.ok) {
+            const data = await response.json();
+            console.log(data);
+            return token;
+          }
 
-          existingUser = await User.create({
-            email: user.email,
-            username: user.name,
-            password: hashedPassword,
-            image: user.image,
-          });
+          const { data } = await response.json();
+
+          // Set the user data to token
+          token.user = {
+            id: data._id,
+            email: data.email,
+            name: data.username,
+            image: data.image || user.image,
+            expertise: data.expertise || "",
+          } as UserDataType;
+        } catch (error) {
+          console.error("Fetching user error:", error);
+          return token;
         }
-
-        // Set the user data to token
-        token.user = {
-          id: existingUser.id,
-          email: existingUser.email,
-          name: existingUser.username,
-          image: existingUser.image || user.image,
-        } as UserToken;
       }
 
       return token;
@@ -53,31 +50,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async session({ session, token }) {
       if (token) {
-        const user = token.user as UserToken;
+        const { id } = token.user as UserDataType;
 
-        session.user = {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          emailVerified: null, // Add emailVerified as null
-        };
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_URL}/api/users/getUser?userId=${id}`
+          );
+
+          if (response.ok) {
+            const { data } = await response.json();
+
+            session.user = {
+              id: data._id,
+              email: data.email,
+              name: data.username,
+              image: data.image || null,
+              expertise: data.expertise || null,
+              emailVerified: null,
+              updatedAt: data.updatedAt,
+            };
+          } else {
+            console.error("Fetch user response error:", await response.json());
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
       }
 
       return session;
     },
   },
-  // cookies: {
-  //   sessionToken: {
-  //     name: `__Secure-next-auth.session-token`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
-  //     options: {
-  //       // All of these options must be specified, even if you're not changing them
-  //       httpOnly: true,
-  //       sameSite: "lax",
-  //       path: "/",
-  //       secure: true,
-  //       domain: `localhost:3000`, // Ideally, you should use an environment variable for this
-  //     },
-  //   },
-  // },
 });

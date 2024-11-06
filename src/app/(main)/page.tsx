@@ -1,12 +1,12 @@
-import { getCurrentUser } from "../lib/getCurrentUser";
 import Main from "./home_page_main/home_page_main";
+import { auth } from "../lib/auth";
 
 export default async function Home() {
-  const user = await getCurrentUser();
+  const session = await auth();
 
   return (
     <div className="w-full">
-      <Main role={user.expertise || ""} />
+      <Main role={session?.user.expertise || ""} />
     </div>
   );
 }

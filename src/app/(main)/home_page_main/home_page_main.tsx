@@ -28,9 +28,9 @@ export default function Main({ role }: MainPropType) {
     title: "",
     location: "",
   });
-  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
+  // const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+  //   null
+  // );
 
   const [datePosted, setDatePosted] = useState<string>("");
   const [employmentType, setEmploymentType] = useState<string>("");

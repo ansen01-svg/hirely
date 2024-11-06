@@ -1,12 +1,13 @@
 import Main from "./main";
-import { getCurrentUser } from "@/app/lib/getCurrentUser";
+import { auth } from "@/app/lib/auth";
+import { UserDataType } from "@/app/types";
 
 export default async function SingleJob() {
-  const user = await getCurrentUser();
+  const session = await auth();
 
   return (
     <div className="w-full">
-      <Main user={user} />
+      <Main user={session?.user as UserDataType} />
     </div>
   );
 }
