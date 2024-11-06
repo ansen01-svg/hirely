@@ -90,3 +90,13 @@ export type ExpertiseOptionType = {
 export type OptionArrayTypes = OptionObjectTypes[];
 
 export type ExpertiseOptionArrayTypes = ExpertiseOptionType[];
+
+export interface UserDataType {
+  id: string;
+  email: string;
+  name: string;
+  image?: string | null;
+  expertise?: string | null;
+  emailVerified: null;
+  updatedAt: string;
+}

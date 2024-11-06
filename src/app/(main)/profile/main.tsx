@@ -9,18 +9,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { expertiseOptions } from "@/app/utils/selectOptions";
 import { ExpertiseOptionArrayTypes } from "@/app/types";
+import { UserDataType } from "@/app/types";
 
 type MainPropType = {
-  user: {
-    _id: string;
-    email: string;
-    username: string;
-    image?: string;
-    expertise?: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
+  user: UserDataType;
 };
 
 // format date
@@ -46,11 +38,11 @@ export default function Main({ user }: MainPropType) {
   const updateUser = async (expertise: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/updateUser`,
+        `${process.env.NEXT_PUBLIC_URL}/api/users/updateUser`,
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer userId=${user._id}`,
+            Authorization: `Bearer userId=${user.id}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ expertise }),
@@ -122,7 +114,7 @@ export default function Main({ user }: MainPropType) {
             <div className="flex flex-col items-start justify-center">
               {user && (
                 <p className="text-[22px] text-primaryLight font-medium">
-                  {user.username}
+                  {user.name}
                 </p>
               )}
               {user && (

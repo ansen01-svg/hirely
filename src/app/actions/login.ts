@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "../lib/auth";
+import { signIn } from "@/app/lib/auth";
 
 type UserLoginType = {
   email: string;

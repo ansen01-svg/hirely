@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-const { MONGO_URI } = process.env;
-
 export const connectDB = async () => {
   try {
-    const { connection } = await mongoose.connect(MONGO_URI as string);
+    const { connection } = await mongoose.connect(
+      process.env.MONGO_URI as string
+    );
     if (connection.readyState === 1) {
       return Promise.resolve(true);
     }
