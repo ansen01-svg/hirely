@@ -17,6 +17,7 @@ const UserSchema = new Schema<UserDocument>(
       type: String,
       unique: true,
       required: [true, "Email is required"],
+      trim: true,
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Email is invalid",
@@ -27,16 +28,19 @@ const UserSchema = new Schema<UserDocument>(
       required: true,
       min: [5, "Password must be more than 5 characters"],
       max: [32, "Password must be less than 32 characters"],
+      trim: true,
     },
     username: {
       type: String,
       required: [true, "Name is required"],
+      trim: true,
     },
     image: {
       type: String,
     },
     expertise: {
       type: String,
+      trim: true,
     },
   },
   {

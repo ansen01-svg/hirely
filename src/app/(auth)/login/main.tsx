@@ -12,6 +12,9 @@ import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
 export default function Main() {
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isCredentialButtonDisabled, setIsCredentialButtonDisabled] =
+    useState<boolean>(false);
+
   const router = useRouter();
 
   const handleShowPassword = () => {
@@ -20,6 +23,7 @@ export default function Main() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsCredentialButtonDisabled(true);
 
     try {
       const formData = new FormData(event.currentTarget);
@@ -29,25 +33,17 @@ export default function Main() {
       if (!email || !password) return;
 
       const res = await login({
-        email,
-        password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
-      if (!res) {
-        setError("Incorrect email or password.");
-      }
-
-      if (res?.error) {
-        setError(res.error as string);
-      }
-
-      if (res?.ok) {
-        console.log("success");
-        return router.push("/");
-      }
+      console.log("response:", res);
+      router.push("/");
     } catch (error) {
       console.error("login error-", error);
       setError("Incorrect email or password.");
+    } finally {
+      setIsCredentialButtonDisabled(false);
     }
   };
 
@@ -82,7 +78,10 @@ export default function Main() {
               )
             }
           />
-          <button className="w-full h-[52px] bg-secondary text-white text-[15px] rounded">
+          <button
+            className="w-full h-[52px] bg-secondary text-white text-[15px] rounded disabled:bg-secondaryDark hover:bg-secondaryDark"
+            disabled={isCredentialButtonDisabled}
+          >
             Login
           </button>
           <Link href="/register" className="text-[13px] text-secondary">

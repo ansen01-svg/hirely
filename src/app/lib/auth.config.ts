@@ -44,11 +44,11 @@ export const authConfig: NextAuthConfig = {
         } catch (error) {
           if (error instanceof ZodError) {
             console.error("Validation error:", error);
+            throw error;
           } else {
             console.error("Authorization error:", error);
+            throw error;
           }
-
-          return null;
         }
       },
     }),
