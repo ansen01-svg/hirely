@@ -1,4 +1,5 @@
 import { googleLoginAction } from "@/app/actions/google_login";
+import React from "react";
 
 type GoogleLoginFormPropType = {
   title: string;

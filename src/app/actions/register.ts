@@ -11,10 +11,25 @@ export const register = async (values: UserType) => {
   try {
     await connectDB();
 
+    if (password.length < 5) {
+      return {
+        success: false,
+        error: "Password must be more than 4 characters",
+      };
+    }
+
+    if (password.length > 32) {
+      return {
+        success: false,
+        error: "Password must be less than 32 characters",
+      };
+    }
+
     const userFound = await User.findOne({ email });
 
     if (userFound) {
       return {
+        success: false,
         error: "Email already exists!",
       };
     }
@@ -27,12 +42,17 @@ export const register = async (values: UserType) => {
       password: hashedPassword,
     });
 
-    const savedUser = await user.save();
-    console.log(savedUser);
-  } catch (error) {
-    console.error(error);
+    await user.save();
+
     return {
-      error: "Network error",
+      success: true,
+      message: "User registered successfully!",
+    };
+  } catch (error) {
+    console.error("Registration error:", error);
+    return {
+      success: false,
+      error: "Network error, please try again later.",
     };
   }
 };

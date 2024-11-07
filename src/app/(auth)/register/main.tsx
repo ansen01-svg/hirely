@@ -12,6 +12,8 @@ import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
 export default function Main() {
   const [error, setError] = useState<string>();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isCredentialButtonDisabled, setIsCredentialButtonDisabled] =
+    useState<boolean>(false);
 
   const ref = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -23,27 +25,39 @@ export default function Main() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
+    setIsCredentialButtonDisabled(true);
 
     const formData = new FormData(event.currentTarget);
-
     const email = formData.get("email") as string;
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
-    if (!email || !username || !password) return;
-
-    const r = await register({
-      email,
-      password,
-      username,
-    });
-
-    if (r?.error) {
-      setError(r.error);
+    if (!email || !username || !password) {
+      setError("All fields are required.");
+      setIsCredentialButtonDisabled(false);
       return;
-    } else {
-      ref.current?.reset();
-      return router.push("/login");
+    }
+
+    try {
+      const response = await register({
+        email: email.trim(),
+        password: password.trim(),
+        username: username.trim(),
+      });
+
+      if (response?.success === false) {
+        setError(response.error);
+      } else if (response?.success === true) {
+        ref.current?.reset();
+        router.push("/login");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("A network error occurred. Please try again.");
+    } finally {
+      setIsCredentialButtonDisabled(false);
     }
   };
 
@@ -80,7 +94,10 @@ export default function Main() {
               )
             }
           />
-          <button className="w-full h-[52px] bg-secondary text-white text-[15px] rounded">
+          <button
+            className="w-full h-[52px] bg-secondary text-white text-[15px] rounded disabled:bg-secondaryDark hover:bg-secondaryDark"
+            disabled={isCredentialButtonDisabled}
+          >
             Sign up
           </button>
           <Link href="/login" className="text-[13px] text-secondary">
