@@ -103,6 +103,7 @@ export default function Conent({ user, image }: ContentPropType) {
 function PopoverContent() {
   const logout = () => {
     googleLogoutAction();
+    localStorage.clear();
   };
 
   return (

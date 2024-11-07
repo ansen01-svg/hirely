@@ -12,13 +12,14 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
+import FormGroup from "@mui/material/FormGroup";
 import { OptionArrayTypes } from "@/app/types";
 import { JobSearchType } from "./home_page_main";
 import {
   datePostedOptions,
   jobRequirementsOptions,
   employmentTypeOptions,
-  radiusOptions,
+  companyTypeOptions,
 } from "@/app/utils/selectOptions";
 
 type FormSectionPropType = {
@@ -31,13 +32,13 @@ type FormSectionPropType = {
   datePosted: string;
   employmentType: string;
   jobRequirements: string;
-  radius: string;
-  checked: boolean;
-  handleSwitchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  companyType: string;
+  isRemote: boolean;
+  handleIsRemoteChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDatePostedChange: (event: SelectChangeEvent<string>) => void;
   handleEmploymentTypeChange: (event: SelectChangeEvent<string>) => void;
   handleJobRequirementsChange: (event: SelectChangeEvent<string>) => void;
-  handleRadiusChange: (event: SelectChangeEvent<string>) => void;
+  handleCompanyTypeChange: (event: SelectChangeEvent<string>) => void;
 };
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
@@ -98,13 +99,13 @@ export default function FormSection(props: FormSectionPropType) {
     datePosted,
     employmentType,
     jobRequirements,
-    radius,
-    checked,
-    handleSwitchChange,
+    companyType,
+    isRemote,
+    handleIsRemoteChange,
     handleDatePostedChange,
     handleEmploymentTypeChange,
     handleJobRequirementsChange,
-    handleRadiusChange,
+    handleCompanyTypeChange,
   } = props;
 
   return (
@@ -236,12 +237,12 @@ export default function FormSection(props: FormSectionPropType) {
           <div className="w-full flex flex-col items-center justify-center gap-5 lg:flex-row lg:gap-8">
             <div className="w-full flex flex-col items-start justify-center gap-2 lg:w-[50%]">
               <SelectInput
-                label="Radius"
-                labelFor="radius"
-                placeholder={"Select radius"}
-                value={radius}
-                handleChange={handleRadiusChange}
-                options={radiusOptions}
+                label="Company type"
+                labelFor="company-type"
+                placeholder={"Select company type"}
+                value={companyType}
+                handleChange={handleCompanyTypeChange}
+                options={companyTypeOptions}
               />
             </div>
 
@@ -258,18 +259,20 @@ export default function FormSection(props: FormSectionPropType) {
           </div>
 
           <div className="w-full mt-5 flex items-center justify-start gap-3">
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-              <AntSwitch
-                checked={checked}
-                onChange={handleSwitchChange}
-                inputProps={{ "aria-label": "controlled" }}
-              />
-              <Typography
-                sx={{ fontSize: "14px", color: "#2d333a", fontWeight: 500 }}
-              >
-                Remote jobs only
-              </Typography>
-            </Stack>
+            <FormGroup>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                <AntSwitch
+                  checked={isRemote}
+                  onChange={handleIsRemoteChange}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+                <Typography
+                  sx={{ fontSize: "14px", color: "#2d333a", fontWeight: 500 }}
+                >
+                  Remote jobs only
+                </Typography>
+              </Stack>
+            </FormGroup>
           </div>
         </div>
       </div>

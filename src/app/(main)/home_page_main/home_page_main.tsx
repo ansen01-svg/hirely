@@ -6,6 +6,7 @@ import DescriptionSection from "./description_section";
 import FormSection from "./form_section";
 import JobsHolderSection from "./jobs_holder_section";
 import { JobData } from "@/app/types";
+import { subDays, isAfter, isToday } from "date-fns";
 import CircularProgress, {
   circularProgressClasses,
   CircularProgressProps,
@@ -22,21 +23,24 @@ export type JobSearchType = {
 
 export default function Main({ role }: MainPropType) {
   const [jobs, setJobs] = useState<JobData[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<JobData[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [isSearchOrFilterApplied, setIsSearchOrFilterApplied] =
+    useState<boolean>(false);
 
   const [jobSearch, setJobSearch] = useState<JobSearchType>({
     title: "",
     location: "",
   });
-  // const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
-  //   null
-  // );
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const [datePosted, setDatePosted] = useState<string>("");
   const [employmentType, setEmploymentType] = useState<string>("");
   const [jobRequirements, setJobRequirements] = useState<string>("");
-  const [radius, setRadius] = useState<string>("");
-  const [checked, setChecked] = useState<boolean>(false);
+  const [companyType, setCompanyType] = useState<string>("");
+  const [isRemote, setIsRemote] = useState<boolean>(false);
 
   const handleJobSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -58,8 +62,8 @@ export default function Main({ role }: MainPropType) {
     localStorage.removeItem("jobSearch");
   };
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+  const handleIsRemoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsRemote(event.target.checked);
   };
 
   const handleDatePostedChange = (event: SelectChangeEvent<string>) => {
@@ -83,19 +87,90 @@ export default function Main({ role }: MainPropType) {
     setJobRequirements(value);
   };
 
-  const handleRadiusChange = (event: SelectChangeEvent<string>) => {
+  const handleCompanyTypeChange = (event: SelectChangeEvent<string>) => {
     const {
       target: { value },
     } = event;
-    setRadius(value);
+    setCompanyType(value);
   };
 
-  // Fetch jobs based on `page` number and `jobSearch` criteria
+  // apply filters to jobs array
+  const applyFilters = useCallback(
+    (jobs: JobData[]) => {
+      return jobs.filter((job) => {
+        const experienceRequired = job.job_required_experience
+          ?.required_experience_in_months
+          ? parseInt(job.job_required_experience.required_experience_in_months)
+          : 0;
+
+        const jobDate = new Date(job.job_posted_at_datetime_utc);
+
+        // filter by date posted
+        if (datePosted && datePosted !== "None") {
+          switch (datePosted) {
+            case "Today":
+              if (!isToday(jobDate)) return false;
+              break;
+            case "3 days ago":
+              if (!isAfter(jobDate, subDays(new Date(), 3))) return false;
+              break;
+            case "1 week ago":
+              if (!isAfter(jobDate, subDays(new Date(), 7))) return false;
+              break;
+            case "1 month ago":
+              if (!isAfter(jobDate, subDays(new Date(), 30))) return false;
+              break;
+            default:
+              break;
+          }
+        }
+
+        // filter by jobRequirements
+        if (jobRequirements && jobRequirements !== "None") {
+          switch (jobRequirements) {
+            case "Fresher":
+              // Reject if experience required is more than 0
+              if (experienceRequired > 0) return false;
+              break;
+            case "Less than 3 years":
+              // Reject if experience required is 3 years or more
+              if (experienceRequired >= 36) return false;
+              break;
+            case "More than 3 years":
+              // Reject if experience required is 3 years or less
+              if (experienceRequired <= 36) return false;
+              break;
+            default:
+              break;
+          }
+        }
+
+        // filter by employment type
+        if (employmentType && employmentType !== "None") {
+          if (job.job_employment_type !== employmentType.toUpperCase())
+            return false;
+        }
+
+        // filter by company type
+        // filter by company type
+        if (companyType && companyType !== "None") {
+          if (job.employer_company_type !== companyType) return false;
+        }
+
+        // filter by remote job
+        if (isRemote && !job.job_is_remote) return false;
+        return true;
+      });
+    },
+    [isRemote, employmentType, jobRequirements, companyType, datePosted]
+  );
+
+  // Fetch jobs `jobSearch` criteria
   const fetchJobs = useCallback(
     async (title: string, location: string) => {
       setIsFetching(true);
+      setIsSearchOrFilterApplied(false);
 
-      // Set default values if title or location is empty
       const searchTitle = title || role || "Software developer";
       const searchLocation = location || "India";
       const query = `${searchTitle} in ${searchLocation}`.replace(/ /g, "%20");
@@ -113,13 +188,18 @@ export default function Main({ role }: MainPropType) {
         const response = await fetch(url, options);
         if (response.status === 200) {
           const data = await response.json();
-          setJobs((prevJobs) => {
-            const newJobs = data.data.filter(
-              (newJob: Record<string, unknown>) =>
-                !prevJobs.some((job) => job.job_id === newJob.job_id)
-            );
-            return [...prevJobs, ...newJobs];
-          });
+
+          // const newJobs = applyFilters(data.data);
+          // setJobs((prevJobs) => {
+          //   const uniqueJobs = newJobs.filter(
+          //     (newJob) => !prevJobs.some((job) => job.job_id === newJob.job_id)
+          //   );
+          //   return uniqueJobs;
+          // });
+
+          setJobs(data.data);
+          setFilteredJobs(applyFilters(data.data));
+          setIsSearchOrFilterApplied(true);
         }
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -130,74 +210,77 @@ export default function Main({ role }: MainPropType) {
     [role]
   );
 
-  // fetch job filters values from local storage and update state
+  // fetch jobs and job filters values from local storage and update state on initial render
   useEffect(() => {
-    const jobSearch = localStorage.getItem("jobSearch");
-    const storedFilters = localStorage.getItem("jobFilters");
+    const storedJobSearch = localStorage.getItem("jobSearch");
+    const parsedSearch = storedJobSearch ? JSON.parse(storedJobSearch) : null;
 
-    if (jobSearch) {
-      const parsedFilters = JSON.parse(jobSearch);
-      setJobSearch({
-        title: parsedFilters.title,
-        location: parsedFilters.location,
-      });
-    }
+    if (parsedSearch) setJobSearch(parsedSearch);
+
+    const storedFilters = localStorage.getItem("jobFilters");
+    const parsedFilters = storedFilters ? JSON.parse(storedFilters) : null;
 
     if (storedFilters) {
-      const parsedFilters = JSON.parse(storedFilters);
+      setIsRemote(parsedFilters.isRemote || false);
       setDatePosted(parsedFilters.datePosted || "");
       setEmploymentType(parsedFilters.employmentType || "");
       setJobRequirements(parsedFilters.jobRequirements || "");
-      setRadius(parsedFilters.radius || "");
+      setCompanyType(parsedFilters.companyType || "");
     }
-  }, []);
+
+    fetchJobs(
+      parsedSearch?.title || jobSearch.title,
+      parsedSearch?.location || jobSearch.location
+    );
+  }, [fetchJobs]);
+
+  // triggers jobFetch and fetches jobs when `jobSearch` has valid values
+  useEffect(() => {
+    // Clear the previous timeout if it exists
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    // Set a new timeout
+    const newTimeout = setTimeout(() => {
+      if (jobSearch.title && jobSearch.location) {
+        localStorage.setItem("jobSearch", JSON.stringify(jobSearch));
+        fetchJobs(jobSearch.title, jobSearch.location);
+      }
+    }, 2000);
+
+    // Store the timeout ID
+    setTypingTimeout(newTimeout);
+
+    // Cleanup function to clear timeout on component unmount or jobSearch change
+    return () => {
+      clearTimeout(newTimeout);
+    };
+  }, [jobSearch, fetchJobs]);
 
   // When filter states are updated, stores it to local storage
   useEffect(() => {
-    if (jobSearch.title && jobSearch.location) {
-      localStorage.setItem("jobSearch", JSON.stringify(jobSearch));
-    }
-
-    // Store all filter values, conditionally including jobSearch values
     const filtersToStore = {
       datePosted,
       employmentType,
       jobRequirements,
-      radius,
+      companyType,
+      isRemote,
     };
 
     localStorage.setItem("jobFilters", JSON.stringify(filtersToStore));
-  }, [jobSearch, datePosted, employmentType, jobRequirements, radius]);
-
-  // triggers jobFetch and fetches jobs when `jobSearch` has valid values
-  // useEffect(() => {
-  //   // Clear the previous timeout if it exists
-  //   if (typingTimeout) {
-  //     clearTimeout(typingTimeout);
-  //   }
-
-  //   // Set a new timeout
-  //   const newTimeout = setTimeout(() => {
-  //     if (jobSearch.title && jobSearch.location) {
-  //       setJobs([]); // Clear previous jobs
-  //       fetchJobs(jobSearch.title, jobSearch.location);
-  //       // console.log("triggered");
-  //     }
-  //   }, 2000);
-
-  //   // Store the timeout ID
-  //   setTypingTimeout(newTimeout);
-
-  //   // Cleanup function to clear timeout on component unmount or jobSearch change
-  //   return () => {
-  //     clearTimeout(newTimeout);
-  //   };
-  // }, [jobSearch]);
-
-  // fetch jobs on load
-  useEffect(() => {
-    fetchJobs(jobSearch.title, jobSearch.location);
-  }, [fetchJobs, jobSearch]);
+    setFilteredJobs(applyFilters(jobs));
+    setIsSearchOrFilterApplied(true);
+  }, [
+    jobSearch,
+    isRemote,
+    datePosted,
+    employmentType,
+    jobRequirements,
+    companyType,
+    applyFilters,
+    jobs,
+  ]);
 
   return (
     <main className="w-full mb-8">
@@ -210,16 +293,21 @@ export default function Main({ role }: MainPropType) {
         datePosted={datePosted}
         employmentType={employmentType}
         jobRequirements={jobRequirements}
-        radius={radius}
-        checked={checked}
+        companyType={companyType}
+        isRemote={isRemote}
         handleDatePostedChange={handleDatePostedChange}
         handleEmploymentTypeChange={handleEmploymentTypeChange}
         handleJobRequirementsChange={handleJobRequirementsChange}
-        handleRadiusChange={handleRadiusChange}
-        handleSwitchChange={handleSwitchChange}
+        handleCompanyTypeChange={handleCompanyTypeChange}
+        handleIsRemoteChange={handleIsRemoteChange}
       />
-      <JobsHolderSection jobs={jobs} />
-      {isFetching && <LoadingJobs />}
+      {isFetching ? (
+        <LoadingJobs />
+      ) : filteredJobs.length === 0 && isSearchOrFilterApplied ? (
+        <NoJobsFound />
+      ) : (
+        <JobsHolderSection jobs={filteredJobs} />
+      )}
     </main>
   );
 }
@@ -262,6 +350,16 @@ function LoadingJobs(props: CircularProgressProps) {
             {...props}
           />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function NoJobsFound() {
+  return (
+    <div className="w-full px-8 md:px-24 lg:px-44">
+      <div className="w-full py-8 mt-10 flex items-center justify-center border-solid border-[1px] border-slate-300 shadow-md">
+        <p className="text-sm text-gray500 font-medium">No jobs found</p>
       </div>
     </div>
   );
