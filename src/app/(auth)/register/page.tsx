@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Main from "./main";
 
 export const metadata: Metadata = {
-  title: "Register",
-  description: "Register page",
+  title: "Sign Up for JobGregate | Start Your Job Search Today",
+  description:
+    "Join JobGregate to access job listings from top platforms in one place. Create an account to save jobs, set preferences, and streamline your job search.",
 };
 
 export default function Register() {

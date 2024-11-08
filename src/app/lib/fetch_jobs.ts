@@ -4,7 +4,7 @@ export const fetchJobs = async () => {
   const options = {
     method: "GET",
     headers: {
-      "x-rapidapi-key": process.env.RAPID_API_KEY || "",
+      "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
       "x-rapidapi-host": "jsearch.p.rapidapi.com",
     },
   };
@@ -13,13 +13,13 @@ export const fetchJobs = async () => {
     const response = await fetch(url, options);
 
     if (response.status !== 200) {
-      return {};
+      return [];
     }
 
-    const result = await response.json();
-    return result;
+    const data = await response.json();
+    return data.data;
   } catch (error) {
     console.error(error);
-    return {};
+    return [];
   }
 };

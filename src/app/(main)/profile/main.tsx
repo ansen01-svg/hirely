@@ -113,9 +113,9 @@ export default function Main({ user }: MainPropType) {
           <div className="flex-1 flex flex-col items-start justify-center gap-5">
             <div className="flex flex-col items-start justify-center">
               {user && (
-                <p className="text-[22px] text-primaryLight font-medium">
+                <h1 className="text-[22px] text-primaryLight font-medium">
                   {user.name}
-                </p>
+                </h1>
               )}
 
               {user && (
@@ -163,8 +163,8 @@ export default function Main({ user }: MainPropType) {
                   </div>
                 </form>
               ) : (
-                <div className="text-[14px] text-slate-500">
-                  <div className="flex items-center justify-center gap-2">
+                <div className="w-full text-[14px] text-slate-500">
+                  <div className="w-full flex items-center justify-start gap-2">
                     {expertise ? (
                       <p>Preferred job role: {expertise}</p>
                     ) : (

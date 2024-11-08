@@ -1,7 +1,7 @@
 import { OptionArrayTypes } from "../types";
 
 export const datePostedOptions: OptionArrayTypes = [
-  { id: 0, title: "None", value: "None" },
+  { id: 0, title: "All", value: "All" },
   { id: 1, title: "Today", value: "today" },
   { id: 2, title: "3 days ago", value: "3days" },
   { id: 3, title: "1 week ago", value: "week" },
@@ -9,7 +9,7 @@ export const datePostedOptions: OptionArrayTypes = [
 ];
 
 export const employmentTypeOptions: OptionArrayTypes = [
-  { id: 0, title: "None", value: "None" },
+  { id: 0, title: "All", value: "All" },
   { id: 1, title: "Fulltime", value: "FULLTIME" },
   { id: 2, title: "Contractor", value: "CONTRACTOR" },
   { id: 3, title: "Part time", value: "PARTTIME" },
@@ -17,22 +17,22 @@ export const employmentTypeOptions: OptionArrayTypes = [
 ];
 
 export const jobRequirementsOptions: OptionArrayTypes = [
-  { id: 0, title: "None", value: "None" },
+  { id: 0, title: "All", value: "All" },
   { id: 1, title: "Less than 3 years", value: "under_3_years_experience" },
   { id: 2, title: "More than 3 years", value: "more_than_3_years_experience" },
   { id: 3, title: "Fresher", value: "no_experience" },
 ];
 
-export const radiusOptions: OptionArrayTypes = [
-  { id: 0, title: "None", value: "None" },
-  { id: 1, title: "Within 30 Kms", value: "30" },
-  { id: 2, title: "Within 50 Kms", value: "50" },
-  { id: 3, title: "Within 100 Kms", value: "100" },
-  { id: 4, title: "Within 150 Kms", value: "150" },
-];
+// export const radiusOptions: OptionArrayTypes = [
+//   { id: 0, title: "None", value: "None" },
+//   { id: 1, title: "Within 30 Kms", value: "30" },
+//   { id: 2, title: "Within 50 Kms", value: "50" },
+//   { id: 3, title: "Within 100 Kms", value: "100" },
+//   { id: 4, title: "Within 150 Kms", value: "150" },
+// ];
 
 export const companyTypeOptions: OptionArrayTypes = [
-  { id: 0, title: "None", value: "None" },
+  { id: 0, title: "All", value: "All" },
   { id: 1, title: "Finance", value: "Finance" },
   { id: 2, title: "Consulting", value: "Consulting" },
   { id: 3, title: "Information", value: "Information" },
