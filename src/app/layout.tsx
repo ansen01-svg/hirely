@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react";
 import AuthWrapper from "./components/auth_wrapper/auth_wrapper";
 
 const geistSans = localFont({
@@ -31,7 +32,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthWrapper>{children}</AuthWrapper>
+        <AuthWrapper>
+          {children}
+          <Analytics />
+        </AuthWrapper>
       </body>
     </html>
   );
