@@ -30,7 +30,7 @@ export default function Main({ user }: MainPropType) {
   const [expertise, setExpertise] = useState<string>(user.expertise || "");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [disabled, setIsDisabled] = useState<boolean>(true);
-  console.log("");
+
   const handleExpertiseChange = (event: SelectChangeEvent<string>) => {
     setExpertise(event.target.value);
   };
