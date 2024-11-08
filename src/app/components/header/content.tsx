@@ -20,7 +20,7 @@ type ContentPropType = {
   user: string;
 };
 
-export default function Conent({ user, image }: ContentPropType) {
+export default function Content({ user, image }: ContentPropType) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,17 +38,19 @@ export default function Conent({ user, image }: ContentPropType) {
     <div className="w-full px-4 py-3 flex items-center justify-between md:justify-between md:px-8 lg:px-24">
       <div className="h-[48px] flex items-center justify-center">
         <Link href={"/"} className="flex items-center justify-center gap-1">
-          <div className="w-[40px] h-10 relative">
+          <div className="w-[24px] h-7 md:w-[40px] md:h-8 relative">
             <Image
               src={logo}
               alt={"logo"}
               fill
               priority
-              sizes="40px"
+              sizes="(max-width: 640px) 24px, (max-width: 768px) 40px"
               style={{ objectFit: "contain" }}
             />
           </div>
-          <p className="text-secondary text-[22px] font-semibold">JOBGREGATE</p>
+          <p className="text-secondary text-[20px] md:text-[22px] font-semibold">
+            JOBGREGATE
+          </p>
         </Link>
       </div>
 
