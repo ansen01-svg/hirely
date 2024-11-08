@@ -13,7 +13,7 @@ import ListItemText from "@mui/material/ListItemText";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { googleLogoutAction } from "@/app/actions/google_logout";
-import logo from "@/app/assets/JobGregate_second.png";
+import logo from "@/app/assets/j.jpg";
 
 type ContentPropType = {
   image: string;
@@ -37,15 +37,18 @@ export default function Conent({ user, image }: ContentPropType) {
   return (
     <div className="w-full px-4 py-3 flex items-center justify-between md:justify-between md:px-8 lg:px-24">
       <div className="h-[48px] flex items-center justify-center">
-        <Link href={"/"} className="w-40 h-16 relative">
-          <Image
-            src={logo}
-            alt={"logo"}
-            fill
-            priority
-            sizes="112px"
-            style={{ objectFit: "contain" }}
-          />
+        <Link href={"/"} className="flex items-center justify-center gap-1">
+          <div className="w-[40px] h-10 relative">
+            <Image
+              src={logo}
+              alt={"logo"}
+              fill
+              priority
+              sizes="40px"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+          <p className="text-secondary text-[22px] font-semibold">JOBGREGATE</p>
         </Link>
       </div>
 
