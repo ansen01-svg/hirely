@@ -9,7 +9,7 @@ type JobsHolderSectionPropType = {
 
 export default function JobsHolderSection({ jobs }: JobsHolderSectionPropType) {
   return (
-    <div className="w-full px-8 md:px-24 lg:px-44">
+    <div className="w-full px-4 md:px-24 lg:px-44">
       {jobs.length > 0 && (
         <div className="w-full py-8">
           <p className="text-[15px] text-primaryLight font-bold">

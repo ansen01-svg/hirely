@@ -62,7 +62,7 @@ export default function Main() {
   };
 
   return (
-    <section className="w-[400px] py-5 flex flex-col items-center justify-center gap-5 rounded">
+    <section className="w-[400px] flex flex-col items-center justify-center gap-5 rounded">
       <div className="w-full">
         <h1 className="text-[28px] font-medium text-center text-primaryLight">
           Create an account

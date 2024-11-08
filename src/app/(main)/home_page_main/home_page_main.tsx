@@ -314,7 +314,7 @@ export default function Main({ role }: MainPropType) {
 
 function LoadingJobs(props: CircularProgressProps) {
   return (
-    <div className="w-full px-8 md:px-24 lg:px-44">
+    <div className="w-full px-4 md:px-24 lg:px-44">
       <div className="w-full py-8 flex items-center justify-center">
         <div className="relative">
           <CircularProgress
@@ -357,7 +357,7 @@ function LoadingJobs(props: CircularProgressProps) {
 
 function NoJobsFound() {
   return (
-    <div className="w-full px-8 md:px-24 lg:px-44">
+    <div className="w-full px-4 md:px-24 lg:px-44">
       <div className="w-full py-8 mt-10 flex items-center justify-center border-solid border-[1px] border-slate-300 shadow-md">
         <p className="text-sm text-gray500 font-medium">No jobs found</p>
       </div>

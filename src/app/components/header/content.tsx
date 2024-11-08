@@ -35,7 +35,7 @@ export default function Conent({ user, image }: ContentPropType) {
   const id = open ? "simple-popover" : undefined;
 
   return (
-    <div className="w-full px-8 py-3 flex items-center justify-between md:justify-between lg:px-24">
+    <div className="w-full px-4 py-3 flex items-center justify-between md:justify-between md:px-8 lg:px-24">
       <div className="h-[48px] flex items-center justify-center">
         <Link href={"/"} className="w-40 h-16 relative">
           <Image
