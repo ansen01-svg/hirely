@@ -1,5 +1,5 @@
 import { auth } from "@/app/lib/auth";
-import Conent from "./content";
+import Content from "./content";
 
 export default async function Header() {
   const session = await auth();
@@ -10,7 +10,7 @@ export default async function Header() {
 
   return (
     <div className="w-full border-b-[1px] border-slate-300">
-      <Conent
+      <Content
         image={session?.user?.image || ""}
         user={getFirstLetter() as string}
       />
