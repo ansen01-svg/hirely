@@ -133,7 +133,7 @@ export default function Main({ user }: MainPropType) {
             <div className="w-full">
               {isEditing ? (
                 <form
-                  className="w-full flex flex-col items-center justify-center gap-2"
+                  className="w-full md:w-[250px] flex flex-col items-center justify-center gap-2"
                   onSubmit={handleSubmit}
                 >
                   <div className="w-full">
