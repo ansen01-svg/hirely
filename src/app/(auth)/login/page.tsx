@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Main from "./main";
 
 export const metadata: Metadata = {
-  title: "Login",
-  description: "Login page",
+  title: "Login to JobGregate | Access Your Job Search Dashboard",
+  description:
+    "Log in to JobGregate to view saved jobs, manage preferences, and continue your job search seamlessly across top platforms.",
 };
 
 export default function Login() {

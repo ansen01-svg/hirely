@@ -75,6 +75,8 @@ function JobCard({ job }: JobCardPropType) {
   return (
     <Link
       href={`/jobs/${job_id}`}
+      target="_blank"
+      rel="noopener noreferrer"
       className="w-full h-[250px] px-5 py-5 flex flex-col items-center justify-center gap-5 border-solid border-[1px] border-slate-300 md:h-[150px] md:flex-row shadow"
     >
       <div className="w-full md:w-[10%] flex items-center justify-center">

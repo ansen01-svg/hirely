@@ -5,11 +5,28 @@ import { CustomImage } from "../../home_page_main/jobs_holder_section";
 import { fetchJobDetails } from "@/app/lib/fetch_job_details";
 import { getTimeDifference } from "../../home_page_main/jobs_holder_section";
 import { JobData } from "@/app/types";
-
-const getJobDetails = cache(fetchJobDetails);
+import NotFound from "./not_found";
 
 type SingleJobProps = {
   params: Promise<{ id: string }>;
+};
+
+const getJobDetails = cache(fetchJobDetails);
+
+export const generateMetadata = async ({ params }: SingleJobProps) => {
+  const { id } = await params;
+  const job = await getJobDetails(id[0]);
+
+  return {
+    title:
+      job.data.length > 0
+        ? `${job.data[0].employer_name} - ${job.data[0].job_title}`
+        : "Not found - 404 Error",
+    description:
+      job.data.length > 0
+        ? "View detailed job information, requirements, and application links on JobGregate. Discover your next role and apply directly to top platforms."
+        : "Not found - 404 Error",
+  };
 };
 
 export default async function SingleJob({ params }: SingleJobProps) {
@@ -17,7 +34,9 @@ export default async function SingleJob({ params }: SingleJobProps) {
   const job = await getJobDetails(id[0]);
   const jobDetails = job.data[0];
 
-  // console.log(jobDetails);
+  if (job.data.length === 0) {
+    return <NotFound />;
+  }
 
   return (
     <main className="w-full">

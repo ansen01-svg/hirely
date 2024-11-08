@@ -106,7 +106,7 @@ export default function Main({ role }: MainPropType) {
         const jobDate = new Date(job.job_posted_at_datetime_utc);
 
         // filter by date posted
-        if (datePosted && datePosted !== "None") {
+        if (datePosted && datePosted !== "All") {
           switch (datePosted) {
             case "Today":
               if (!isToday(jobDate)) return false;
@@ -126,7 +126,7 @@ export default function Main({ role }: MainPropType) {
         }
 
         // filter by jobRequirements
-        if (jobRequirements && jobRequirements !== "None") {
+        if (jobRequirements && jobRequirements !== "All") {
           switch (jobRequirements) {
             case "Fresher":
               // Reject if experience required is more than 0
@@ -146,14 +146,14 @@ export default function Main({ role }: MainPropType) {
         }
 
         // filter by employment type
-        if (employmentType && employmentType !== "None") {
+        if (employmentType && employmentType !== "All") {
           if (job.job_employment_type !== employmentType.toUpperCase())
             return false;
         }
 
         // filter by company type
         // filter by company type
-        if (companyType && companyType !== "None") {
+        if (companyType && companyType !== "All") {
           if (job.employer_company_type !== companyType) return false;
         }
 

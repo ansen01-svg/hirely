@@ -15,8 +15,10 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Hirely",
-  description: "Hirely home page",
+  title:
+    "JobGregate: Your Ultimate Job Search Aggregator | Find Jobs Across Top Platforms",
+  description:
+    "JobGregate aggregates jobs from top platforms in one place, simplifying your job search. Find the right role effortlessly with listings from LinkedIn, Glassdoor, and more.",
 };
 
 export default function RootLayout({
