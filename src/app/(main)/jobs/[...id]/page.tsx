@@ -1,5 +1,6 @@
 import { cache } from "react";
 import Link from "next/link";
+import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
 import { CustomImage } from "../../home_page_main/jobs_holder_section";
 import { fetchJobDetails } from "@/app/lib/fetch_job_details";
 import { getTimeDifference } from "../../home_page_main/jobs_holder_section";
@@ -16,9 +17,11 @@ export default async function SingleJob({ params }: SingleJobProps) {
   const job = await getJobDetails(id[0]);
   const jobDetails = job.data[0];
 
+  // console.log(jobDetails);
+
   return (
-    <div className="w-full">
-      <main className="w-full">
+    <main className="w-full">
+      <div className="w-full">
         <Header
           companyLogo={jobDetails.employer_logo}
           companyName={jobDetails.employer_name}
@@ -26,8 +29,8 @@ export default async function SingleJob({ params }: SingleJobProps) {
         />
         <MainCard job={jobDetails} />
         <JobDescription job={jobDetails} />
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
 
@@ -39,11 +42,17 @@ type HeaderPropType = {
 
 function Header({ companyLogo, companyName, datePosted }: HeaderPropType) {
   return (
-    <div className="w-full px-8 md:px-24 lg:px-72">
+    <div className="w-full px-4 md:px-24 lg:px-72">
       <div className="w-full py-8 flex items-center justify-center">
         <div className="w-14 h-14">
           <div className="w-full h-full relative border-[1px] border-slate-300 rounded-full">
-            <CustomImage src={companyLogo} alt="company_logo" sizes={128} />
+            {companyLogo ? (
+              <CustomImage src={companyLogo} alt="company_logo" sizes={128} />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center rounded-full border-[1px] border-slate-300">
+                <ImageNotSupportedOutlinedIcon sx={{ color: "#2d333a" }} />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex-1 h-full px-5 text-[14px] text-primaryLight flex flex-col items-start justify-center gap-1">
@@ -92,7 +101,7 @@ function MainCard({ job }: MainCardPropType) {
     );
 
   return (
-    <div className="w-full px-8 md:px-24 lg:px-72">
+    <div className="w-full px-4 md:px-24 lg:px-72">
       <div className="w-full px-7 py-4 flex flex-col items-start justify-center gap-5 border-solid border-[1px] border-slate-300">
         <div className="text-primaryLight text-[15px] flex flex-col items-start justify-center gap-1">
           <h1 className="text-[22px] text-start">{job_title}</h1>
@@ -169,7 +178,7 @@ function JobDescription({ job }: MainCardPropType) {
   } = job;
 
   return (
-    <div className="w-full px-8 md:px-24 lg:px-72">
+    <div className="w-full px-4 md:px-24 lg:px-72">
       <div className="w-full py-6 flex flex-col items-start justify-center gap-5">
         <div className="text-[14px] text-primaryLight flex flex-col items-start justify-center gap-5">
           <h1 className="text-[22px] text-black">About the role:</h1>
