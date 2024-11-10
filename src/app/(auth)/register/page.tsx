@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Register() {
   return (
-    <div className="w-[100vw] h-screen flex items-center justify-center">
+    <div className="w-[100vw] h-screen flex items-start justify-center">
       <Main />
     </div>
   );
