@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { register } from "@/app/actions/register";
 import GoogleLoginForm from "@/app/components/google_login_form/google_login_form";
 import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
+import logo from "@/app/assets/j.jpg";
 
 export default function Main() {
   const [error, setError] = useState<string>();
@@ -62,7 +64,19 @@ export default function Main() {
   };
 
   return (
-    <section className="w-[400px] flex flex-col items-center justify-center gap-5 rounded">
+    <section className="w-[400px] mt-9 flex flex-col items-center justify-center gap-5 rounded">
+      <div className="w-full flex items-center justify-center">
+        <div className="w-[50px] h-12 relative">
+          <Image
+            src={logo}
+            alt={"logo"}
+            fill
+            priority
+            sizes="50px"
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+      </div>
       <div className="w-full">
         <h1 className="text-[28px] font-medium text-center text-primaryLight">
           Create an account
