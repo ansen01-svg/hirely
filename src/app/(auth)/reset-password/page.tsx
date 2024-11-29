@@ -2,15 +2,21 @@ import type { Metadata } from "next";
 import Main from "./main";
 
 export const metadata: Metadata = {
-  title: "Login to JobGregate | Access Your Job Search Dashboard",
+  title: "Reset Password | JobGregate - Secure Your Account",
   description:
-    "Log in to JobGregate to view saved jobs, manage preferences, and continue your job search seamlessly across top platforms.",
+    "Reset your password to secure your JobGregate account. Enter a new password and regain seamless access to your job search dashboard.",
 };
 
-export default function ResetPassword() {
+type ResetPasswordPropType = { searchParams: { token?: string } };
+
+export default async function ResetPassword({
+  searchParams,
+}: ResetPasswordPropType) {
+  const { token } = await searchParams;
+
   return (
-    <div className="w-[100vw] h-screen flex items-start justify-center">
-      <Main />
+    <div className="w-[100vw] h-screen flex items-center justify-center">
+      <Main token={token || ""} />
     </div>
   );
 }

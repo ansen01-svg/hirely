@@ -2,15 +2,19 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import { FormEvent, useState, useEffect } from "react";
 import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
 import logo from "@/app/assets/j.jpg";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-export default function Main() {
+type MianPropType = {
+  token: string;
+};
+
+export default function Main({ token }: MianPropType) {
   const [error, setError] = useState<string>("");
   const [passwordChanged, setPasswordChanged] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -20,8 +24,6 @@ export default function Main() {
     useState<boolean>(false);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
 
   // load password state on component mount
   useEffect(() => {
@@ -97,6 +99,8 @@ export default function Main() {
     router.push("/");
   };
 
+  if (!token) return <NoToken />;
+
   if (!passwordChanged) {
     return (
       <ResetPasswordFormComponent
@@ -109,9 +113,9 @@ export default function Main() {
         isCredentialButtonDisabled={isCredentialButtonDisabled}
       />
     );
-  } else {
-    return <EmailSentComponent handleBackButtonClick={handleBackButtonClick} />;
   }
+
+  return <EmailSentComponent handleBackButtonClick={handleBackButtonClick} />;
 }
 
 type ResetPasswordFormComponentPropType = {
@@ -128,6 +132,19 @@ type EmailSentComponentPropType = {
   handleBackButtonClick: () => void;
 };
 
+function NoToken() {
+  return (
+    <section className="w-[400px] flex flex-col items-center justify-center gap-5 rounded">
+      <div className="p-4 rounded-full border-solid border-[2px] border-secondary">
+        <CloseOutlinedIcon sx={{ fontSize: "50px", color: "#10a37f" }} />
+      </div>
+      <p className="text-[14px] text-error">
+        No token provided. Unable to verify your email.
+      </p>
+    </section>
+  );
+}
+
 function ResetPasswordFormComponent(props: ResetPasswordFormComponentPropType) {
   const {
     error,
@@ -140,7 +157,7 @@ function ResetPasswordFormComponent(props: ResetPasswordFormComponentPropType) {
   } = props;
 
   return (
-    <section className="w-[400px] mt-9 flex flex-col items-center justify-center gap-5 rounded">
+    <section className="w-[400px] mb-36 flex flex-col items-center justify-center gap-5 rounded">
       <div className="w-full flex items-center justify-center">
         <div className="w-[50px] h-12 relative">
           <Image
@@ -233,7 +250,7 @@ function EmailSentComponent({
   handleBackButtonClick,
 }: EmailSentComponentPropType) {
   return (
-    <section className="w-[400px] mt-36 flex flex-col items-center justify-center gap-5 rounded">
+    <section className="w-[400px] flex flex-col items-center justify-center gap-5 rounded">
       <div className="p-4 rounded-full border-solid border-[2px] border-secondary">
         <CheckOutlinedIcon sx={{ fontSize: "50px", color: "#10a37f" }} />
       </div>

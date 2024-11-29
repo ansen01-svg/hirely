@@ -1,17 +1,19 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
-export default function Main() {
+type MianPropType = {
+  token: string;
+};
+
+export default function Main({ token }: MianPropType) {
   const [loading, setLoading] = useState<boolean>(true);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
 
   // Post token to the API for verification
   const verifyEmail = useCallback(async () => {
