@@ -109,6 +109,7 @@ function PopoverContent() {
   const logout = () => {
     googleLogoutAction();
     localStorage.clear();
+    sessionStorage.clear();
   };
 
   return (

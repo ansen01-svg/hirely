@@ -24,7 +24,7 @@ export default auth((req) => {
   }
 
   if (isAccessingAuthRoute) {
-    if (isAuth) {
+    if (isAuth && pathname !== "/verify-email") {
       return NextResponse.redirect(new URL("/", req.url));
     }
 

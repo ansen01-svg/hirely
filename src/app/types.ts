@@ -97,6 +97,6 @@ export interface UserDataType {
   name: string;
   image?: string | null;
   expertise?: string | null;
-  emailVerified: null;
+  emailVerified: boolean;
   updatedAt: string;
 }

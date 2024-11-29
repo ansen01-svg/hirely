@@ -9,7 +9,6 @@ type UserLoginType = {
 
 export const login = async ({ email, password }: UserLoginType) => {
   const res = await signIn("credentials", {
-    // identifier: data.identifier,
     email: email,
     password: password,
     redirect: false,

@@ -187,18 +187,13 @@ export default function Main({ role }: MainPropType) {
       try {
         const response = await fetch(url, options);
         if (response.status === 200) {
-          const data = await response.json();
+          const data = (await response.json()) as { data: JobData[] };
+          const uniqueJobs: JobData[] = Array.from(
+            new Map(data.data.map((job) => [job.job_id, job])).values()
+          );
 
-          // const newJobs = applyFilters(data.data);
-          // setJobs((prevJobs) => {
-          //   const uniqueJobs = newJobs.filter(
-          //     (newJob) => !prevJobs.some((job) => job.job_id === newJob.job_id)
-          //   );
-          //   return uniqueJobs;
-          // });
-
-          setJobs(data.data);
-          setFilteredJobs(applyFilters(data.data));
+          setJobs(uniqueJobs);
+          setFilteredJobs(applyFilters(uniqueJobs));
           setIsSearchOrFilterApplied(true);
         }
       } catch (error) {

@@ -7,6 +7,11 @@ export interface UserDocument {
   username: string;
   image: string;
   expertise: string;
+  isVerified: boolean;
+  verificationToken: string;
+  verificationTokenExpiry: Date;
+  passwordResetToken: string;
+  passwordResetTokenExpiry: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -42,6 +47,14 @@ const UserSchema = new Schema<UserDocument>(
       type: String,
       trim: true,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: String,
+    verificationTokenExpiry: Date,
+    passwordResetToken: String,
+    passwordResetTokenExpiry: Date,
   },
   {
     timestamps: true,
