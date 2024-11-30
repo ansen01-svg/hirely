@@ -38,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: data.username,
             image: data.image || user.image,
             expertise: data.expertise || "",
+            emailVerified: data.isVerified,
           } as UserDataType;
         } catch (error) {
           console.error("Fetching user error:", error);
@@ -66,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               name: data.username,
               image: data.image || null,
               expertise: data.expertise || null,
-              emailVerified: null,
+              emailVerified: data.isVerified,
               updatedAt: data.updatedAt,
             };
           } else {

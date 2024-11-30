@@ -4,8 +4,8 @@ import Image from "next/image";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { login } from "@/app/actions/login";
 import GoogleLoginForm from "@/app/components/google_login_form/google_login_form";
 import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
@@ -34,12 +34,11 @@ export default function Main() {
 
       if (!email || !password) return;
 
-      const res = await login({
+      await login({
         email: email.trim(),
         password: password.trim(),
       });
 
-      console.log("response:", res);
       router.push("/");
     } catch (error) {
       console.error("login error-", error);
@@ -79,6 +78,7 @@ export default function Main() {
           className="w-full px-8 flex flex-col justify-between items-center gap-2"
         >
           <MuiTextField label="Email" type="email" name="email" />
+
           <MuiTextField
             label="Password"
             type={showPassword ? "text" : "password"}
@@ -86,21 +86,42 @@ export default function Main() {
             handleClick={handleShowPassword}
             icon={
               showPassword ? (
-                <VisibilityIcon fontSize="small" sx={{ color: "#2d333a" }} />
+                <VisibilityOutlinedIcon
+                  fontSize="small"
+                  sx={{ color: "#2d333a" }}
+                />
               ) : (
-                <VisibilityOffIcon fontSize="small" sx={{ color: "#2d333a" }} />
+                <VisibilityOffOutlinedIcon
+                  fontSize="small"
+                  sx={{ color: "#2d333a" }}
+                />
               )
             }
           />
-          <button
-            className="w-full h-[52px] bg-secondary text-white text-[15px] rounded disabled:bg-secondaryDark hover:bg-secondaryDark"
-            disabled={isCredentialButtonDisabled}
-          >
-            Login
-          </button>
-          <Link href="/register" className="text-[13px] text-secondary">
-            {"Don't have an account?"}
-          </Link>
+
+          <div className="w-full py-3 text-start">
+            <Link
+              href={"/forgot-password"}
+              className="text-secondary text-[13px]"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
+          <div className="w-full">
+            <button
+              className="w-full h-[52px] bg-secondary text-white text-[15px] rounded disabled:bg-secondaryDark hover:bg-secondaryDark"
+              disabled={isCredentialButtonDisabled}
+            >
+              Login
+            </button>
+          </div>
+
+          <div className="w-full text-center">
+            <Link href="/register" className="text-[13px] text-secondary">
+              {"Don't have an account?"}
+            </Link>
+          </div>
         </form>
       </div>
       <div className="w-full px-8">

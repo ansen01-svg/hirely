@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/app/lib/db";
 import User from "@/app/models/user.model";
 import { UserType } from "@/app/types";
+import sendEmail from "../lib/sendEmail";
 
 export const register = async (values: UserType) => {
   const { email, password, username } = values;
@@ -43,6 +44,17 @@ export const register = async (values: UserType) => {
     });
 
     await user.save();
+
+    // create verification token
+    const hashedToken = await bcrypt.hash(user._id.toString(), 10);
+
+    // attach verification tokens and expiry to the user and save
+    user.verificationToken = hashedToken;
+    user.verificationTokenExpiry = new Date(Date.now() + 172800000); // expiration date set to 2 days
+    await user.save();
+
+    // send mail
+    await sendEmail({ email, emailType: "VERIFY-EMAIL", token: hashedToken });
 
     return {
       success: true,

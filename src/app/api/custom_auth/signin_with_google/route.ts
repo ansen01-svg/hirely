@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         username: name,
         password: hashedPassword,
         image,
+        isVerified: true,
       });
     }
 

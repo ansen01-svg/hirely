@@ -4,8 +4,8 @@ import Image from "next/image";
 import { FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { register } from "@/app/actions/register";
 import GoogleLoginForm from "@/app/components/google_login_form/google_login_form";
 import MuiTextField from "@/app/components/mui_text_field/mui_text_field";
@@ -94,7 +94,9 @@ export default function Main() {
           className="w-full px-8 flex flex-col justify-between items-center gap-2"
         >
           <MuiTextField label="Username" type="username" name="username" />
+
           <MuiTextField label="Email" type="email" name="email" />
+
           <MuiTextField
             label="Password"
             type={showPassword ? "text" : "password"}
@@ -102,21 +104,33 @@ export default function Main() {
             handleClick={handleShowPassword}
             icon={
               showPassword ? (
-                <VisibilityIcon fontSize="small" sx={{ color: "#2d333a" }} />
+                <VisibilityOutlinedIcon
+                  fontSize="small"
+                  sx={{ color: "#2d333a" }}
+                />
               ) : (
-                <VisibilityOffIcon fontSize="small" sx={{ color: "#2d333a" }} />
+                <VisibilityOffOutlinedIcon
+                  fontSize="small"
+                  sx={{ color: "#2d333a" }}
+                />
               )
             }
           />
-          <button
-            className="w-full h-[52px] bg-secondary text-white text-[15px] rounded disabled:bg-secondaryDark hover:bg-secondaryDark"
-            disabled={isCredentialButtonDisabled}
-          >
-            Sign up
-          </button>
-          <Link href="/login" className="text-[13px] text-secondary">
-            Already have an account?
-          </Link>
+
+          <div className="w-full">
+            <button
+              className="w-full h-[52px] bg-secondary text-white text-[15px] rounded disabled:bg-secondaryDark hover:bg-secondaryDark"
+              disabled={isCredentialButtonDisabled}
+            >
+              Sign up
+            </button>
+          </div>
+
+          <div className="w-full text-center">
+            <Link href="/login" className="text-[13px] text-secondary">
+              Already have an account?
+            </Link>
+          </div>
         </form>
       </div>
       <div className="w-full px-8">

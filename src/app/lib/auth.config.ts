@@ -40,6 +40,7 @@ export const authConfig: NextAuthConfig = {
             name: data.username,
             image: data.image || "",
             expertise: data.expertise || "",
+            emailVerified: data.isVerified,
           };
         } catch (error) {
           if (error instanceof ZodError) {
