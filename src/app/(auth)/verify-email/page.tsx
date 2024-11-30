@@ -7,7 +7,9 @@ export const metadata: Metadata = {
     "Verify your email to activate your JobGregate account. Gain access to job searches, saved preferences, and personalized career opportunities across top platforms., and continue your job search seamlessly across top platforms.",
 };
 
-type VerifyEmailPropType = { searchParams: { token?: string } };
+type VerifyEmailPropType = {
+  searchParams: Promise<{ token?: string }>;
+};
 
 export default async function VerifyEmail({
   searchParams,

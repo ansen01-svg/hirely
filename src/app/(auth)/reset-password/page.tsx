@@ -7,7 +7,9 @@ export const metadata: Metadata = {
     "Reset your password to secure your JobGregate account. Enter a new password and regain seamless access to your job search dashboard.",
 };
 
-type ResetPasswordPropType = { searchParams: { token?: string } };
+type ResetPasswordPropType = {
+  searchParams: Promise<{ token?: string }>;
+};
 
 export default async function ResetPassword({
   searchParams,

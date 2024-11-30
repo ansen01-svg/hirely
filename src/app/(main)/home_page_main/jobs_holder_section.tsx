@@ -149,23 +149,16 @@ export function CustomImage({ src, alt, sizes }: CustomImageProps) {
   ];
   const hostname = new URL(src).hostname;
 
-  return allowedDomains.includes(hostname) ? (
+  return (
     <Image
       src={src}
       alt={alt}
       fill
       priority
       sizes={`${sizes}px`}
+      unoptimized={!allowedDomains.includes(hostname)}
       style={{ objectFit: "contain" }}
       className="rounded-full"
-    />
-  ) : (
-    <img
-      src={src}
-      alt={alt}
-      width={"100%"}
-      height={"100%"}
-      style={{ borderRadius: "50%" }}
     />
   );
 }
