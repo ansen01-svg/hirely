@@ -26,6 +26,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    if (!user.image) {
+      user.image = image;
+      await user.save();
+    }
+
     return NextResponse.json(
       {
         message: `User fetched successfully updated.`,
