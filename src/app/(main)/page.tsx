@@ -1,4 +1,4 @@
-import Main from "./home_page_main/home_page_main";
+import Main from "@/app/components/home/home_page_main";
 import { auth } from "../lib/auth";
 
 export default async function Home() {

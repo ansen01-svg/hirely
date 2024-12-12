@@ -84,7 +84,7 @@ export default function Main({ user }: MainPropType) {
   return (
     <main className="w-full min-h-[calc(90vh-73px)]">
       <div className="w-full px-4 md:px-24 lg:px-72">
-        <div className="w-full py-8 px-6 mt-10 flex items-start justify-center gap-7 border-solid border-[1px] border-slate-300 rounded shadow">
+        <div className="w-full py-8 px-6 mt-10 flex items-start justify-center gap-7 border-solid border-[1px] border-slate-300 rounded">
           <div className="w-16 h-16 md:w-28 md:h-28 flex items-center justify-center">
             <div className="w-full h-full relative border-solid border-[1px] border-slate-300 rounded-full">
               {user.image ? (

@@ -6,7 +6,7 @@ type LayoutPropType = {
   children: React.ReactNode;
 };
 
-export default function Layout({ children }: LayoutPropType) {
+export default async function Layout({ children }: LayoutPropType) {
   return (
     <div>
       <Header />

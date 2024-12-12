@@ -110,7 +110,7 @@ export default function FormSection(props: FormSectionPropType) {
 
   return (
     <div className="w-full px-4 md:px-24 lg:px-44">
-      <div className="w-full border-solid border-[1px] border-slate-300 shadow">
+      <div className="w-full bg-primary border-solid border-[1px] border-slate-300">
         <div className="w-full py-5 px-5 md:px-6 md:py-4 lg:px-8 lg:py-4">
           <div className="w-full flex flex-col items-center justify-center gap-5 lg:flex-row lg:gap-0">
             <div className="w-full h-full flex flex-col items-start justify-start lg:w-[50%]">
