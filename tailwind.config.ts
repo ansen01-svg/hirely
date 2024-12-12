@@ -11,7 +11,8 @@ const config: Config = {
       backgroundColor: {
         primary: "#fff",
         secondary: "#10a37f",
-        gray: "#f4f4f4",
+        // gray: "#f4f4f4",
+        gray: "#E8E6E1",
       },
       colors: {
         primary: "#000",

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ImageNotSupportedOutlinedIcon from "@mui/icons-material/ImageNotSupportedOutlined";
 import { JobData } from "@/app/types";
+import { getTimeDifference } from "@/app/utils/getTimeDifference";
 
 type JobsHolderSectionPropType = {
   jobs: JobData[];
@@ -17,7 +18,7 @@ export default function JobsHolderSection({ jobs }: JobsHolderSectionPropType) {
           </p>
         </div>
       )}
-      <div className="w-full flex flex-col items-center justify-center gap-5 border-solid">
+      <div className="w-full flex flex-col items-center justify-center gap-2 border-solid">
         {jobs &&
           jobs.map((job) => {
             return <JobCard key={job.job_id as string} job={job} />;
@@ -30,34 +31,6 @@ export default function JobsHolderSection({ jobs }: JobsHolderSectionPropType) {
 type JobCardPropType = {
   job: JobData;
 };
-
-// calculate when job was posted
-export function getTimeDifference(dateString: string): string {
-  const targetDate = new Date(dateString);
-  const currentDate = new Date();
-
-  // Calculate the difference in milliseconds
-  const differenceInMs = currentDate.getTime() - targetDate.getTime();
-
-  // Convert the difference to hours
-  const hoursDifference = differenceInMs / (1000 * 60 * 60);
-
-  if (hoursDifference < 24) {
-    // If the difference is less than 24 hours, return it in hours
-    if (hoursDifference === 1) {
-      return `${Math.floor(hoursDifference)} hour ago`;
-    } else {
-      return `${Math.floor(hoursDifference)} hours ago`;
-    }
-  } else if (hoursDifference === 24) {
-    const daysDifference = hoursDifference / 24;
-    return `${Math.floor(daysDifference)} day ago`;
-  } else {
-    // If the difference is 24 hours or more, return it in days
-    const daysDifference = hoursDifference / 24;
-    return `${Math.floor(daysDifference)} days ago`;
-  }
-}
 
 function JobCard({ job }: JobCardPropType) {
   const {
@@ -77,7 +50,7 @@ function JobCard({ job }: JobCardPropType) {
       href={`/jobs/${job_id}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="w-full h-[250px] px-5 py-5 flex flex-col items-center justify-center gap-5 border-solid border-[1px] border-slate-300 md:h-[150px] md:flex-row shadow"
+      className="w-full bg-primary h-[250px] px-5 py-5 flex flex-col items-center justify-center gap-5 border-solid border-[1px] border-slate-300 md:h-[150px] md:flex-row"
     >
       <div className="w-full md:w-[10%] flex items-center justify-center">
         {employer_logo ? (

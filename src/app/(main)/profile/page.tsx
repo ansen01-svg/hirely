@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Main from "./main";
+import Main from "../../components/profile/main";
 import { auth } from "@/app/lib/auth";
 import { UserDataType } from "@/app/types";
 
